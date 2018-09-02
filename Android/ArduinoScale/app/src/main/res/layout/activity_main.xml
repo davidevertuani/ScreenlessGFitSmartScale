@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/baseLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Channel subscription"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Switch
+        android:id="@+id/switchUser1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:tag="user1"
+        android:text="User1\t\t"
+        android:textColor="@color/common_google_signin_btn_text_light_default"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Switch
+        android:id="@+id/switchUser2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:tag="user2"
+        android:text="User2\t\t"
+        android:textColor="@color/common_google_signin_btn_text_light_default"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/switchUser1"
+        app:layout_constraintTop_toBottomOf="@+id/switchUser1" />
+
+    <Switch
+        android:id="@+id/switchUser3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:tag="user3"
+        android:text="User3\t\t"
+        android:textColor="@color/common_google_signin_btn_text_light_default"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/switchUser2"
+        app:layout_constraintTop_toBottomOf="@+id/switchUser2" />
+
+    <Switch
+        android:id="@+id/switchUser4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:tag="user4"
+        android:text="User4\t\t"
+        android:textColor="@color/common_google_signin_btn_text_light_default"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/switchUser3"
+        app:layout_constraintTop_toBottomOf="@+id/switchUser3" />
+
+    <Switch
+        android:id="@+id/switchGeneric"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:tag="generic"
+        android:text="Generic\t\t"
+        android:textColor="@color/common_google_signin_btn_text_light_default"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/switchUser4"
+        app:layout_constraintTop_toBottomOf="@+id/switchUser4" />
+
+    <Switch
+        android:id="@+id/switchDev"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:tag="dev"
+        android:text="Development\t\t"
+        android:textColor="@color/common_google_signin_btn_text_light_default"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/switchGeneric"
+        app:layout_constraintTop_toBottomOf="@+id/switchGeneric" />
+
+</android.support.constraint.ConstraintLayout>
