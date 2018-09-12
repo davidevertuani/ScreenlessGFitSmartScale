@@ -4,8 +4,30 @@ String token_google_user2 = "[TOKEN_USER_2]";
 String token_google_user3 = "[TOKEN_USER_3]";
 String token_google_user4 = "[TOKEN_USER_4]";
 
+String token_pushbullet_user1 = "[PUSHBULLET_TOKEN_USER_1]";
+String token_pushbullet_user2 = "[PUSHBULLET_TOKEN_USER_2]";
+String token_pushbullet_user3 = "[PUSHBULLET_TOKEN_USER_3]";
+String token_pushbullet_user4 = "[PUSHBULLET_TOKEN_USER_4]";
+
 String CHAR_POOO = "\\uD83D\\uDCA9";
 String CHAR_LOVE = "\\uD83D\\uDE0D";
+
+String get_pushbulet_token(){
+  switch (user) {
+    case 0:
+      return token_pushbullet_user1;
+      break;
+    case 1:
+      return token_pushbullet_user2;
+      break;
+    case 2:
+      return token_pushbullet_user3;
+      break;
+    case 3:
+      return token_pushbullet_user4;
+      break;
+  }
+}
 
 int getLed(int user) {
   switch (user) {
@@ -149,7 +171,7 @@ String getCompliment() {
     case 0: return "You're so slim today!";
     case 1: return "Custom compliment 2"; break;
     //etc...
-    }  
+    }
 }
 
 String getJoke() {
