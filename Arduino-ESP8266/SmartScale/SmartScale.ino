@@ -124,26 +124,26 @@ void loop() {
   }
   else {
     switch (phase) {
-      case 0: //user selection
-        blink_led();
+      case 0:                                               //user select phase
+        blink_led();                                        //blink user led
         checkPhaseChange();
         
         if (flag) {
-          currentUser++;
-          if (currentUser == user_count) updating = true;
-          currentUser = currentUser % user_count;
-          current_shift_led = currentUser;
-          allLedOff();
-          flag = false;
+          currentUser++;                                    //select next user when button has been pressed
+          if (currentUser == user_count) updating = true;   //enter OTA upload mode after last user
+          currentUser = currentUser % user_count;           //cycle between 0 and user_count
+          current_shift_led = currentUser;                  //select the led corresponding to the user
+          allLedOff();                                      //turn off all leds to have the next led light up properly
+          flag = false;                                     //set button pressed flag to false
         }
         break;
-      case 1:                     //weighting phase
-        if (flag) sleep();        //sleep if button has been pressed
-        shift_led();              //move led to the next one
-        checkWeight();            //read weight
+      case 1:                                               //weighting phase
+        if (flag) sleep();                                  //sleep if button has been pressed
+        shift_led();                                        //move led to the next one
+        checkWeight();                                      //read weight
         break;
     }
-    checkSleep();                 //check if enought time has elapsed, if so sleep
+    checkSleep();                                           //check if enough time has elapsed, if so sleep
   }
   delay(10);
 }
@@ -152,7 +152,7 @@ void checkSleep() {
   if (millis() > 35000) {
     String body = String("Peso: ") + weight + " kg;  range: " + get_range();
     send_push("Errore - inaffidabile", body);
-    sleep();                      //notify user before sleeping
+    sleep();                                                //notify user before sleeping
   }
 }
 
@@ -165,7 +165,7 @@ void handleInterrupt() {
 
 void checkPhaseChange() {
   if ((get_weight() > 20) && !updating) {
-    phase = 1;                  //switch from "user selection" to "weighting" phase if weight>20 & it's updating the software
+    phase = 1;                                              //switch from "user selection" to "weighting" phase if weight>20 & it's updating the software
     allLedOff();
     flag = false;
   }
@@ -180,17 +180,17 @@ void checkWeight() {
     allLedOn();
     float post_weight = get_mean();
     
-    if (currentUser > -1) {
+    if (currentUser > -1) {                                                 //if a user has been selected
       int postStatus = postWeight(String(post_weight, 2));
       
-      if (postStatus > 0) {
+      if (postStatus > 0) {                                                  //if a correct response from google fit has been received
         String body = String("New weight registered: ") + String(post_weight, 2) + " kg.\n" + getPhrase(post_weight);
         send_push(String("Scale - ") + getTopic(), body);
-      }
+      }                                                                      //if NOT a correct response...
       else send_push("Google Fit Error", "Weight of " + String(post_weight, 2) + " kg acquired but not uploaded. Error n.: " + postStatus);
       sleep();
 
-    } else {
+    } else {                                                                 //if no user has been selected (no button pressed -> currentUser = -1 -> generic user, do not post to google fit)
       send_push("generic", "Scale - Generic", "Weight: " + String(post_weight, 2) + " kg.\n" + getJoke());
       sleep();
     }
@@ -203,7 +203,7 @@ void sleep() {
   scale.power_down();
   delay(50);
 
-  for (int i = 0; i < 7; i++) {
+  for (int i = 0; i < 7; i++) {                                               //flash leds to let user know
     allLedOn();
     delay(150);
     allLedOff();
@@ -214,7 +214,7 @@ void sleep() {
   ESP.deepSleep(0);
 }
 
-void OTA_setup() {
+void OTA_setup() {                                                            //OTA SETUP
   ArduinoOTA.setHostname("Scale");
   ArduinoOTA.setPassword("otapassword");
 

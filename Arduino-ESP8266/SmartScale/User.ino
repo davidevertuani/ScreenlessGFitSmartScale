@@ -124,7 +124,7 @@ String getTokenGoogle() {
 String getTopic() {
   switch (currentUser) {
     case 0:
-      return "User1";
+      return "User1"; //customize with family members names...
       break;
     case 1:
       return "User2";

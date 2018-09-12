@@ -1,3 +1,63 @@
+bool send_push(String title, String message) {
+  String topic = getTopic();
+  topic.toLowerCase();
+
+  //send_push_gmessages(topic, title, message);  //uncomment the line to use Firebase Cloud Messages Instead
+
+  send_push_pushbullet();
+}
+
+void send_push_pushbullet(String title, String message) {
+  const int httpPort = 443;
+  String host = "api.pushbullet.com";
+
+  WiFiClientSecure client;
+  Serial.println("---------------REFRESH TOKEN---------------\n\nConnecting to host\n");
+
+  if (!client.connect(host, httpPort)) {
+    Serial.println("connection failed");
+    return;
+  }
+
+  //String mBody = String("{\"body\":\"" + message + "\",\"title\":\"" + title + "\",\"type\":\"note\",\"device_iden\":\"" + [device_iden] + "\"}";
+  //uncomment the previous line if you want to target a specific device
+
+  String mBody = String("{\"body\":\"") + message + "\",\"title\":\"" + title + "\",\"type\":\"note\"}";
+
+  String payload = String("POST ") + "/v2/pushes HTTP/1.1\n" +
+                   "Host: " + host + "\n" +
+                   "User-Agent: SmartScale\n" +
+                   "Access-Token: " + get_pushbulet_token() + "\n" +
+                   "Content-length: " + mBody.length() + "\n" +
+                   "Accept: */*\n" +
+                   "Content-type: application/json\n\n" +
+                   mBody + "\r\n";
+
+  client.println(payload);
+
+  unsigned long timeout = millis();
+  while (client.available() == 0) {
+    if (millis() - timeout > 5000) {
+      Serial.println(F("\n>>> Client Timeout !"));
+      client.stop();
+      return;
+    }
+  }
+
+  char status[32] = {0};
+  client.readBytesUntil('\r', status, sizeof(status));
+  if (strcmp(status, "HTTP/1.1 200 OK") != 0) {
+    Serial.println(F("Unexpected response: "));
+    Serial.println(status);
+    return;
+  }
+
+  Serial.println(F("Correclty sent pushbullet message\n"));
+
+  // Disconnect
+  client.stop();
+}
+
 int refreshTokenMessages() {
   WiFiClientSecure client;
   String mbodyRefreshMess = "client_secret=[MESSAGE_CLIENT_SECRET]&grant_type=refresh_token&refresh_token=[MESSAGE_REFRESH_TOKEN]&client_id=[MESSAGE_CLIENT_ID]";
@@ -34,7 +94,7 @@ int refreshTokenMessages() {
     return -2;
   }
 
-   // Skip HTTP headers
+  // Skip HTTP headers
   char endOfHeaders[] = "\r\n\r\n";
   if (!client.find(endOfHeaders)) return -3;
 
@@ -65,65 +125,6 @@ int refreshTokenMessages() {
   // Disconnect
   client.stop();
   return 1;
-}
-
-bool send_push(String title, String message) {
-  String topic = getTopic();
-  topic.toLowerCase();
-
-  //send_push_gmessages(topic, title, message);  //uncomment the line to use Google Cloud Messages Instead
-  send_push_pushbullet();
-}
-
-void send_push_pushbullet(String title, String message) {
-  const int httpPort = 443;
-  String host = "api.pushbullet.com";
-
-  WiFiClientSecure client;
-  Serial.println("---------------REFRESH TOKEN---------------\n\nConnecting to host\n");
-
-  if (!client.connect(host, httpPort)) {
-    Serial.println("connection failed");
-    return;
-  }
-
-  //String mBody = String("{\"body\":\"" + message + "\",\"title\":\"" + title + "\",\"type\":\"note\",\"device_iden\":\"" + device_iden + "\"}";
-  //uncomment the previous line if you want to target a specific device
-
-  String mBody = String("{\"body\":\"" + message + "\",\"title\":\"" + title + "\",\"type\":\"note\"}";
-
-  String payload = String("POST ") + "/v2/pushes HTTP/1.1\n" +
-                   "Host: " + host + "\n" +
-                   "User-Agent: SmartScale\n"+
-                   "Access-Token: " + get_pushbulet_token() + "\n" +
-                   "Content-length: " + mBody.length() + "\n" +
-                   "Accept: */*\n"+
-                   "Content-type: application/json\n\n" +
-                   mBody + "\r\n";
-
-  client.println(payload);
-
-  unsigned long timeout = millis();
-  while (client.available() == 0) {
-    if (millis() - timeout > 5000) {
-      Serial.println(F("\n>>> Client Timeout !"));
-      client.stop();
-      return;
-    }
-  }
-
-  char status[32] = {0};
-  client.readBytesUntil('\r', status, sizeof(status));
-  if (strcmp(status, "HTTP/1.1 200 OK") != 0) {
-    Serial.println(F("Unexpected response: "));
-    Serial.println(status);
-    return;
-  }
-
-  Serial.println(F("Correclty sent puchbullet message\n"));
-
-  // Disconnect
-  client.stop();
 }
 
 bool send_push_gmessages(String topic, String title, String message) {
